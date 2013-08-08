@@ -1,0 +1,39 @@
+function check_for_datafile(filename,numlines,datadir,SubNum,sessNum,taskstr)
+
+if nargin < 6
+    taskstr = 'empty';
+end
+
+if exist(filename)
+    subnumtxt={'Overwrite the existing file? (yes/no)'}; %prompt text                        
+    name='WARNING';   % name of input window                                       
+    defaultans2 = {'no'};
+    owrite = inputdlg(subnumtxt,name,numlines,defaultans2);
+    if strcmp(owrite, 'no')==1
+        uiwait(msgbox('Please retry with different input information'));
+%         subnumtxt={'Participant Number:', 'Session Number:'}; %prompt text                        
+%         name='Retype Participant info';   % name of input window                                                                                                
+%         %subject = inputdlg(subnumtxt,name,numlines,defaultans1);
+%         subject = inputdlg(subnumtxt,name,numlines);
+%         SubNum = str2double(subject{1}); 
+%         sessNum = str2double(subject{2});
+    else
+        uiwait(msgbox('Overwriting previous data file.'));
+    end
+end
+% if exist(sprintf('%sdatafile_%s_p%03d_s%02d.mat',datadir,taskstr,SubNum,sessNum))
+%     subnumtxt={'Overwrite the existing file? (yes/no)'}; %prompt text                        
+%     name='WARNING';   % name of input window                                       
+%     defaultans2 = {'no'};
+%     owrite = inputdlg(subnumtxt,name,numlines,defaultans2);
+%     if strcmp(owrite, 'no')==1
+%         subnumtxt={'Participant Number:', 'Session Number:'}; %prompt text                        
+%         name='Retype Participant info';   % name of input window                                                                                                
+%         %subject = inputdlg(subnumtxt,name,numlines,defaultans1);
+%         subject = inputdlg(subnumtxt,name,numlines);
+%         SubNum = str2double(subject{1}); 
+%         sessNum = str2double(subject{2});
+%     else
+%         uiwait(msgbox('Overwriting previous data file.'));
+%     end
+% end
