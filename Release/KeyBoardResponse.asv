@@ -63,7 +63,7 @@ else
         end;
         
         if keyCode(KbName('6^')) || keyCode(KbName('6'))
-            response=3;
+            response=1;
             reactiontime=secs;
             reject=0;
 
@@ -77,7 +77,7 @@ else
         end;
         
         if keyCode(KbName('8*')) || keyCode(KbName('8'))
-            response=1;
+            response=2;
             reactiontime=secs;
             reject=0;
 
@@ -92,4 +92,3 @@ else
     end
 end
 RestrictKeysForKbCheck([]);
-DisableKeysForKbCheck([]);

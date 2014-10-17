@@ -1,0 +1,60 @@
+function [response, reactiontime, reject] = ButtonResponse(period)
+if nargin < 1
+    period = 2; %period is the time to wait for response (in secs)
+end
+KbName('UnifyKeyNames'); %macOS keyboard, makes code portable
+DisableKeysForKbCheck(KbName('space')); % so that MRI pulse does not interupt
+esc=KbName('ESCAPE'); % for escaping the experiment during stims
+b1 = KbName('1!');
+b2 = KbName('2@');
+RestrictKeysForKbCheck([b1,b2,esc]);
+%period = 4;
+Computer_time = GetSecs;
+time = KbWait([],0, period+Computer_time);
+wait_time = time - Computer_time;
+if wait_time > period
+    response = 0;
+    reactiontime = 9999;
+    reject = 1;
+else
+    [keyIsDown, secs, keyCode]=KbCheck;
+    if (keyIsDown==1)
+        % Abort requested?
+        if keyCode(esc)
+            % This signals abortion:
+            sca;
+            response = NaN;
+            reactiontime = NaN;
+            reject = NaN;
+            % Break out of display loop:
+        end;
+
+        % one key pressed to indicate detection of event?
+        if keyCode(KbName('1!'))
+            response=1;
+            reactiontime=GetSecs; % subtract your stim onset or other value
+            reject=0;             % to truely calculate reaction time, this is simply the time in secs
+        end                       % since system start up
+
+        if keyCode(KbName('2@'))
+            response=2;
+            reactiontime=GetSecs;
+            reject=0;
+
+        end;
+        
+        if keyCode(KbName('3#'))
+            response=3;
+            reactiontime=GetSecs;
+            reject=0;
+
+        end;
+        
+        if keyCode(KbName('3#'))
+            response=3;
+            reactiontime=GetSecs;
+            reject=0;
+
+        end;
+    end
+end

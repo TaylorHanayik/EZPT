@@ -1,0 +1,15 @@
+function ThreeScreenLabels(params, left, middle, right,ThreeDestinations)
+
+Screen('TextFont',params.win, params.font);
+Screen('TextStyle', params.win, 1);
+Screen('TextSize', params.win, params.tsize);
+Screen('DrawText', params.win, left, ThreeDestinations(1,1)+ThreeDestinations(1,1)/2, ThreeDestinations(4,1) + 150, [34 139 34])%34-139-34 green
+Screen('DrawText', params.win, middle, ThreeDestinations(1,2)+ThreeDestinations(1,2)/2, ThreeDestinations(4,2) + 150, [255 0 0]);%255-0-0 red
+Screen('DrawText', params.win, right, ThreeDestinations(1,3)+20, ThreeDestinations(4,3) + 150, [255 255 0]);%255-255-0 yellow
+
+% Screen('TextFont',params.win, params.font);
+% Screen('TextStyle', params.win, 1);
+% Screen('TextSize', params.win, params.tsize);
+% Screen('DrawText', params.win, left, ThreeDestinations(1,1), 600, [34 139 34])%34-139-34 green
+% Screen('DrawText', params.win, middle, 615, 600, [255 0 0]);%255-0-0 red
+% Screen('DrawText', params.win, right, 1015, 600, [255 255 0]);%255-255-0 yellow

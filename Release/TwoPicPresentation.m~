@@ -1,10 +1,10 @@
-function [onsettime, response, reactiontime, reject]=ThreePicPresentation(params, img1, img2, img3)
+function [onsettime, response, reactiontime, reject]=TwoPicPresentation(params, img1, img2, img3)
 
-[ImageTextures] = TexturesFromThreePics(params, img1, img2, img3);
+[ImageTextures] = TexturesFromTwoPics(params, img1, img2, img3);
 ThreeDestinations = ThreeImageDestinations(params);
-left = 'MIDDLE';
-middle = 'INDEX';
-right = 'THUMB';
+left = 'Green';
+middle = 'Red';
+right = 'Yellow';
 ThreeScreenLabels(params, left, middle, right,ThreeDestinations)
 Screen('DrawTextures', params.win, ImageTextures, [], ThreeDestinations);
 [vbl,onsettime] = Screen('Flip', params.win);

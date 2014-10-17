@@ -1,5 +1,11 @@
-function PlayAudioSimple(wavfilename)
-[y, freq] = wavread(wavfilename);
+function [response, reactiontime, reject, t1, s, ptime] = PlayAudioMatrixResp(params,speakerimg,mat2play,sr)
+
+%[y, freq] = wavread(wavfilename);'
+if nargin<5
+    sr=44100;
+end
+y=mat2play;
+freq=sr;
 ptime = numel(y)/freq;
 wavedata = y';
 nrchannels = size(wavedata,1); % Number of rows == number of channels.
@@ -8,7 +14,24 @@ if nrchannels == 1
     wavedata(2,:)=wavedata;
     nrchannels=2;
 end
+% for speaker pic
 
+winWidth = rect(3);
+winHeight = rect(4);
+vertsize=330; %old value = 330
+horizsize=330;
+speakerd = [winWidth/2 - horizsize + 150, ... %left
+              winHeight/2 - vertsize/2, ... %top
+              winWidth/2 + horizsize + 150, ... %right
+              winHeight/2 + vertsize/2]'; %bottom
+
+%speakerimg = imread(sprintf('%sspeaker.jpg', picdir));
+speakertex = Screen('MakeTexture', win, speakerimg);
+Screen('DrawTexture', win, speakertex, [], speakerd);
+Screen('Flip', win);
+% tsize=100;
+% Screen('TextSize', win, tsize);
+% DrawFormattedText(win, '+' , 'center', 'center',[0 134 246 ], 50);
 
 try
     % Try with the 'freq'uency we wanted:
@@ -30,18 +53,10 @@ PsychPortAudio('FillBuffer', pahandle, wavedata);
 t1 = PsychPortAudio('Start', pahandle, 1, 0, 1);
 %startTime = PsychPortAudio('Start', pahandle [, repetitions=1] [, when=0] [, waitForStart=0] [, stopTime=inf] [, resume=0]);
 s = PsychPortAudio('GetStatus', pahandle);
-% RestrictKeysForKbCheck(esc);
-% Computer_time = GetSecs;
-% [secs, keyCode] = KbPressWait([],0, ptime+Computer_time);
-% if keyCode(esc)
-%     sca;
-% end
- pause(ptime); %plays audio til the entire clip has been played then ends
-% Stop playback:
-%PsychPortAudio('Stop', pahandle);
-% Close the audio device:
-%PsychPortAudio('Close', pahandle);
-% Screen('Close',speakertex);
+
+[response, reactiontime, reject] = KeyBoardResponse(ptime);
+
+Screen('Close',speakertex);
 PsychPortAudio('Close',pahandle);
-% StimEnd = GetSecs;
-% Screen('Close');
+%StimEnd = GetSecs;
+end

@@ -1,0 +1,71 @@
+function [] = LoadMovieIntoBackGround(params, moviename)
+
+    
+        Screen('OpenMovie', params.win, moviename,1);%keep only this
+
+    Screen('PlayMovie', movie, 1, 0, 1.0);
+
+  
+    movietexture=0;     % Texture handle for the current movie frame.
+    reactiontime=-1;    % Variable to store reaction time.
+    lastpts=0;          % Presentation timestamp of last frame.
+    onsettime=-1;       % Realtime at which the event was shown to the subject.
+    reject=0;      % Flag which is set to 1 to reject an invalid trial.
+    timeOfEvent = 0;
+    while(movietexture>=0)
+
+        % The 0 - flag means: Don't wait for arrival of new frame, just
+        % return a zero or -1 'movietexture' if none is ready.
+        [movietexture pts] = Screen('GetMovieImage', params.win, movie, 0);
+
+        % Is it a valid texture?
+        if (movietexture>0)
+            % Yes. Draw the texture into backbuffer:
+            Screen('DrawTexture', params.win, movietexture,[],params.vidRect);
+
+            % Flip the display to show the image at next retrace:
+            % vbl will contain the exact system time of image onset on
+            % screen: This should be accurate in the sub-millisecond
+            % range.
+            vbl=Screen('Flip', params.win);
+            % Is this the event video frame we've been waiting for?
+            if onsettime==-1 && pts >= timeOfEvent
+                % Yes: This is the first frame with a pts timestamp that is
+                % equal or greater than the timeOfEvent, so 'vbl' is
+                % the exact time when the event was presented to the
+                % subject. Define it as onsettime:
+                onsettime = vbl;
+
+                % Compare current pts to last one to see if the movie
+                % decoder skipped a frame at this crucial point in
+                % time. That would invalidate this trial.
+                if (pts - lastpts > 1.5*(1/fps))
+                    % Difference to last frame is more than 1.5 times
+                    % the expected difference under assumption 'no
+                    % skip'. We skipped in the wrong moment!
+                    reject=1;
+                end;
+            end;
+
+            % Keep track of the frames pts in order to check for skipped frames:
+            lastpts=pts;
+
+            % Delete the texture. We don't need it anymore:
+            Screen('Close', movietexture);
+            movietexture=0;
+        end
+    end; % ...of display loop...
+
+   
+    droppedcount = Screen('PlayMovie', movie, 0, 0, 0);
+%     if (droppedcount > 0.2*framecount)
+%         % Over 20% of all frames skipped?!? Playback problems! We
+%         % reject this trial...
+%         reject=4;
+%     end;
+
+    % Close the moviefile.
+    Screen('CloseMovie', movie);
+
+
+

@@ -4,7 +4,7 @@ KbName('UnifyKeyNames');
 esc=KbName('ESCAPE');
 ent = KbName('RETURN');
 space=KbName('space');
-b1 = KbName('1!');
+%b1 = KbName('1!');
 % Select specific text font, style and size:
 Screen('TextFont',params.win, params.font);
 Screen('TextSize',params.win, params.tsize);
@@ -32,11 +32,11 @@ mytext = [mytext char(10)];
 %Screen('FillRect', params.win);
 Screen('Flip',params.win);
 %DrawFormattedText(params.win, mytext, 'center', 'center', [0 134 246 ], 0);
-DrawFormattedText(params.win, mytext, 'center', 'center', params.TextColor, 40);
+DrawFormattedText(params.win, mytext, 'center', 'center', params.TextColor, 60);
                        %txt     %Xpos      %Ypos    %color    %char/line
 Screen('Flip',params.win);
-RestrictKeysForKbCheck([esc,ent,space,b1]);
-[secs, keyCode] = KbWait([],2);
+RestrictKeysForKbCheck([esc,ent,space]);
+[secs, keyCode] = KbWait;
 if keyCode(esc)
     sca;
     RestrictKeysForKbCheck([]);

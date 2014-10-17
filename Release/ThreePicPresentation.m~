@@ -1,0 +1,18 @@
+function [onsettime, response, reactiontime, reject]=ThreePicPresentation(params, img1, img2, img3)
+
+
+vertsize=330;
+horizsize=330;
+[ImageTextures] = TexturesFromThreePics(params, img1, img2, img3);
+ThreeDestinations = ThreeImageDestinations(params);
+stim_labels(win);
+Screen('DrawTextures', win, stim_textures, [], stim_destinations);
+Screen('Flip', win);
+onsettime = GetSecs;
+if respdevice==1
+    [response, reactiontime, reject] = KeyBoardResponse(resp_period);
+elseif respdevice==2
+    [response, reactiontime, reject] = ButtonResponse(resp_period);
+end
+Screen('Close',stim_textures);  
+Screen('Close');

@@ -1,4 +1,4 @@
-function [response, reactiontime, reject] = KeyBoardResponse(period)
+function [response, reactiontime, reject] = KeyBoardResponseIOeeg(period,IOinfo)
 if nargin < 1
     period = 2; %period is the time to wait for response (in secs)
 end
@@ -89,6 +89,9 @@ else
             reject=0;
 
         end;
+        if IOinfo.useIO
+            io64(IOinfo.obj,IOinfo.address,(IOinfo.response + response)); WaitSecs(IOinfo.pulseL); io64(IOinfo.obj,IOinfo.address,0);
+        end
     end
 end
 RestrictKeysForKbCheck([]);

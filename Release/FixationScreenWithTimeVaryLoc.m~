@@ -1,0 +1,29 @@
+function [fixon, fixoff] = FixationScreenWithTimeVaryLoc(params) %input is window pointer
+
+period = params.fixperiod;
+%Screen('Flip',params.win);
+%Screen('FillRect', win);
+Screen('TextSize', params.win, params.fixsize);
+
+%vid size  = 540 x 540
+dist = 540/3;
+rX = floor(rand*dist);
+rY = floor(rand*dist);
+posNeg = rand;
+
+if posNeg > 0 & posNeg <=0.25
+    rX = -rX;
+elseif posNeg >0.25 & posNeg <=0.50
+    rY = -rY;
+elseif posNeg > 0.50 & posNeg <= 0.75
+    rY = -rY;
+    rX = -rX;
+end
+
+%DrawFormattedText(params.win, '+' , 'center', 'center',[0 134 246 ], 50);
+DrawFormattedText(params.win, '+' , params.X+rX, params.Y+rY ,params.TextColor, 50);
+                       %fix   Xpos      Ypos      Color
+[vbl, fixon] = Screen('Flip',params.win);
+%pause(period)
+fixoff = WaitSecs('UntilTime',GetSecs+period);
+%fixoff = GetSecs;
